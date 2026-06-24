@@ -13,8 +13,9 @@ async function getTournament(id: string) {
   return { tournament, entries: entries ?? [], matches: matches ?? [] }
 }
 
-export default async function TournamentPage({ params }: { params: { id: string } }) {
-  const { tournament, entries, matches } = await getTournament(params.id)
+export default async function TournamentPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const { tournament, entries, matches } = await getTournament(id)
   if (!tournament) notFound()
 
   const maxRound = matches.reduce((max: number, m: any) => Math.max(max, m.round), 0)
